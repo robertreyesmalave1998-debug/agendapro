@@ -1,5 +1,3 @@
- 
-
 <!DOCTYPE html>
 
 <html lang="pt-BR">
@@ -8,12 +6,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>AgendaPro — Agendamento inteligente</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Sora:wght@700&display=swap" rel="stylesheet"/>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
 :root{--brand:#7c3aed;--brand-dark:#5b21b6;--brand-light:#f5f3ff;--brand-mid:#ede9fe;--text:#1e1b4b;--muted:#6b7280;--border:#ede9fe;--bg:#f9f7ff;--white:#fff;}
 body{font-family:'DM Sans',sans-serif;color:var(--text);background:var(--white);}
 
-/* NAVBAR */
 .navbar{display:flex;align-items:center;justify-content:space-between;padding:1rem 2rem;border-bottom:1px solid var(–border);background:var(–white);position:sticky;top:0;z-index:100;}
 .nav-logo{display:flex;align-items:center;gap:10px;}
 .nav-mark{width:36px;height:36px;background:var(–brand);border-radius:10px;display:flex;align-items:center;justify-content:center;}
@@ -24,11 +22,9 @@ body{font-family:'DM Sans',sans-serif;color:var(--text);background:var(--white);
 .btn-outline{padding:8px 18px;border:1.5px solid var(–brand);color:var(–brand);background:var(–white);border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;font-family:‘DM Sans’,sans-serif;}
 .btn-solid{padding:8px 18px;background:var(–brand);color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;font-family:‘DM Sans’,sans-serif;}
 
-/* PAGES */
 .page{display:none;}
 .page.active{display:block;}
 
-/* LANDING */
 .hero{background:linear-gradient(160deg,#f5f3ff,#ede9fe);padding:5rem 2rem 4rem;text-align:center;}
 .hero-badge{display:inline-block;background:#fff;color:var(–brand);font-size:12px;font-weight:700;padding:5px 14px;border-radius:99px;border:1px solid var(–brand-mid);margin-bottom:1.25rem;}
 .hero h1{font-family:‘Sora’,sans-serif;font-size:42px;line-height:1.15;color:var(–text);margin-bottom:1rem;max-width:600px;margin-left:auto;margin-right:auto;}
@@ -91,7 +87,6 @@ footer{padding:2rem;text-align:center;border-top:1px solid var(–border);}
 footer p{font-size:13px;color:var(–muted);}
 footer strong{color:var(–brand);}
 
-/* CADASTRO */
 .cad-wrap{max-width:480px;margin:0 auto;padding:2rem 1rem;}
 .cad-steps{display:flex;align-items:center;justify-content:center;gap:0;margin-bottom:2rem;}
 .cad-dot{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;font-family:‘Sora’,sans-serif;}
@@ -125,26 +120,27 @@ footer strong{color:var(–brand);}
 .suc-icon svg{width:34px;height:34px;}
 .suc-link{background:var(–brand-light);border:1px solid var(–brand-mid);border-radius:10px;padding:12px;font-size:14px;color:var(–brand);font-family:monospace;font-weight:700;margin:1rem 0;word-break:break-all;}
 
-/* APP PAINEL - MOBILE RESPONSIVE */
-.app-wrap{display:flex;height:calc(100vh - 65px);min-height:500px;position:relative;}
+/* Mensagem de erro/sucesso */
+.msg-err{display:none;background:#fef2f2;border:1px solid #fecaca;border-radius:8px;padding:9px 12px;font-size:13px;color:#dc2626;margin-bottom:1rem;}
+.msg-ok{display:none;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:9px 12px;font-size:13px;color:#166534;margin-bottom:1rem;}
 
-/* Hamburger button */
+/* Loading spinner */
+.loading{display:inline-block;width:16px;height:16px;border:2px solid #ffffff40;border-top-color:#fff;border-radius:50%;animation:spin .6s linear infinite;vertical-align:middle;margin-right:6px;}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* APP PAINEL */
+.app-wrap{display:flex;height:calc(100vh - 65px);min-height:500px;position:relative;}
 .hamburger{display:none;position:fixed;top:75px;left:12px;z-index:200;background:var(–brand);color:#fff;border:none;border-radius:8px;width:38px;height:38px;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 2px 8px rgba(124,58,237,0.3);}
 .hamburger svg{width:18px;height:18px;}
-
-/* Overlay for mobile */
 .sb-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:150;}
 .sb-overlay.show{display:block;}
-
 .app-sb{width:200px;background:#fff;border-right:1px solid var(–border);display:flex;flex-direction:column;flex-shrink:0;transition:transform 0.25s ease;z-index:160;}
-
 @media(max-width:768px){
 .hamburger{display:flex;}
 .app-sb{position:fixed;top:65px;left:0;height:calc(100vh - 65px);transform:translateX(-100%);box-shadow:4px 0 20px rgba(0,0,0,0.15);}
 .app-sb.open{transform:translateX(0);}
 .app-main{width:100%;}
 }
-
 .app-sb-top{padding:.875rem 1rem;border-bottom:1px solid var(–border);display:flex;align-items:center;gap:8px;}
 .sb-mark{width:32px;height:32px;background:var(–brand);border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
 .sb-mark svg{width:17px;height:17px;}
@@ -195,12 +191,10 @@ footer strong{color:var(–brand);}
 .link-acts{display:flex;gap:8px;margin-top:.75rem;}
 .btn-lo{padding:6px 14px;border:1.5px solid var(–brand);color:var(–brand);background:#fff;border-radius:7px;font-size:12px;font-family:‘DM Sans’,sans-serif;font-weight:700;cursor:pointer;}
 
-/* LOGIN */
 .login-wrap{display:flex;align-items:center;justify-content:center;min-height:calc(100vh - 65px);background:var(–bg);padding:2rem;}
 .login-box{background:#fff;border-radius:16px;padding:2rem;width:100%;max-width:360px;border:1px solid var(–border);}
 .login-box h2{font-family:‘Sora’,sans-serif;font-size:20px;color:var(–text);margin-bottom:.25rem;}
 .login-box .sub{font-size:13px;color:var(–muted);margin-bottom:1.5rem;}
-.login-err{display:none;background:#fef2f2;border:1px solid #fecaca;border-radius:8px;padding:9px 12px;font-size:13px;color:#dc2626;margin-bottom:1rem;}
 </style>
 
 </head>
@@ -232,60 +226,29 @@ footer strong{color:var(–brand);}
 </div>
 <div class="hero-note">Sem cartão de crédito · Cancele quando quiser</div>
 </section>
-
 <div class="nicho-bar">
 <p>Ideal para</p>
-<div class="nichos">
-<span>Salões</span><span>Clínicas</span><span>Academias</span><span>Psicólogos</span><span>Dentistas</span>
+<div class="nichos"><span>Salões</span><span>Clínicas</span><span>Academias</span><span>Psicólogos</span><span>Dentistas</span></div>
 </div>
-</div>
-
 <section class="features">
-<div class="sec-header">
-<h2>Tudo que você precisa</h2>
-<p>Funcionalidades pensadas para pequenos negócios que querem crescer</p>
-</div>
+<div class="sec-header"><h2>Tudo que você precisa</h2><p>Funcionalidades pensadas para pequenos negócios que querem crescer</p></div>
 <div class="feat-grid">
-<div class="feat-card">
-<div class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M8 2v4M16 2v4M3 10h18"/></svg></div>
-<h3>Agendamento online</h3>
-<p>Seus clientes marcam horário pelo celular a qualquer hora, sem precisar ligar.</p>
-</div>
-<div class="feat-card">
-<div class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></div>
-<h3>Painel completo</h3>
-<p>Veja todos os agendamentos, clientes e receita em um só lugar.</p>
-</div>
-<div class="feat-card">
-<div class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><path d="M22 4L12 14.01l-3-3"/></svg></div>
-<h3>Confirmação automática</h3>
-<p>O cliente recebe confirmação na hora. Menos faltas, mais organização.</p>
-</div>
-<div class="feat-card">
-<div class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/><path d="M2 12h20"/></svg></div>
-<h3>Link próprio</h3>
-<p>Seu negócio ganha um link exclusivo para compartilhar no Instagram e WhatsApp.</p>
-</div>
+<div class="feat-card"><div class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M8 2v4M16 2v4M3 10h18"/></svg></div><h3>Agendamento online</h3><p>Seus clientes marcam horário pelo celular a qualquer hora, sem precisar ligar.</p></div>
+<div class="feat-card"><div class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></div><h3>Painel completo</h3><p>Veja todos os agendamentos, clientes e receita em um só lugar.</p></div>
+<div class="feat-card"><div class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><path d="M22 4L12 14.01l-3-3"/></svg></div><h3>Confirmação automática</h3><p>O cliente recebe confirmação na hora. Menos faltas, mais organização.</p></div>
+<div class="feat-card"><div class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/><path d="M2 12h20"/></svg></div><h3>Link próprio</h3><p>Seu negócio ganha um link exclusivo para compartilhar no Instagram e WhatsApp.</p></div>
 </div>
 </section>
-
 <section class="como">
-<div class="sec-header">
-<h2>Como funciona</h2>
-<p>Configure em menos de 5 minutos</p>
-</div>
+<div class="sec-header"><h2>Como funciona</h2><p>Configure em menos de 5 minutos</p></div>
 <div class="steps-list">
 <div class="step-item"><div class="step-n">1</div><div><h4>Crie sua conta</h4><p>Cadastre seu negócio, adicione seus serviços e horários disponíveis.</p></div></div>
 <div class="step-item"><div class="step-n">2</div><div><h4>Compartilhe seu link</h4><p>Mande o link pelo WhatsApp, coloque na bio do Instagram ou no Google.</p></div></div>
 <div class="step-item"><div class="step-n">3</div><div><h4>Clientes agendam sozinhos</h4><p>Eles escolhem o serviço, dia e horário — você só confirma e atende.</p></div></div>
 </div>
 </section>
-
 <section class="precos">
-<div class="sec-header">
-<h2>Planos simples</h2>
-<p>Sem taxa de adesão. Cancele quando quiser.</p>
-</div>
+<div class="sec-header"><h2>Planos simples</h2><p>Sem taxa de adesão. Cancele quando quiser.</p></div>
 <div class="preco-grid">
 <div class="plano">
 <div class="plano-nome">Básico</div>
@@ -304,13 +267,11 @@ footer strong{color:var(–brand);}
 </div>
 </div>
 </section>
-
 <section class="cta-final">
 <h2>Pronto para organizar<br>seu negócio?</h2>
 <p>14 dias grátis, sem precisar de cartão de crédito.</p>
 <button class="btn-cta" onclick="showPage('cadastro')">Criar minha conta grátis</button>
 </section>
-
 <footer><p><strong>AgendaPro</strong> · Sistema de agendamento online · 2026</p></footer>
 </div>
 
@@ -337,13 +298,14 @@ footer strong{color:var(–brand);}
 <div class="cad-card" id="ce2" style="display:none">
 <h2>Criar sua conta</h2>
 <div class="sub">Para acessar o painel do AgendaPro.</div>
+<div id="cad-err" class="msg-err"></div>
 <div class="field"><label>Seu nome</label><input type="text" id="fno" placeholder="Maria Silva"/></div>
 <div class="field"><label>Email</label><input type="email" id="fe" placeholder="maria@email.com"/></div>
 <div class="field-row">
 <div class="field"><label>Senha</label><input type="password" id="fs" placeholder="••••••••"/></div>
 <div class="field"><label>Confirmar</label><input type="password" id="fs2" placeholder="••••••••"/></div>
 </div>
-<button class="btn-cad" onclick="cadIr(3)">Continuar →</button>
+<button class="btn-cad" id="btn-registrar" onclick="doRegister()">Continuar →</button>
 <button class="btn-back" onclick="cadIr(1)">← Voltar</button>
 </div>
 <div class="cad-card" id="ce3" style="display:none">
@@ -351,16 +313,8 @@ footer strong{color:var(–brand);}
 <div class="sub">Comece grátis por 14 dias. Sem cartão de crédito.</div>
 <div class="trial-note">14 dias grátis em qualquer plano</div>
 <div class="planos-cad">
-<div class="plano-cad" id="pcb" onclick="selPlan('b')">
-<div class="pc-nome">Básico</div>
-<div class="pc-preco">R$49<span>/mês</span></div>
-<ul class="pc-items"><li>50 agendamentos</li><li>1 profissional</li><li>Link público</li></ul>
-</div>
-<div class="plano-cad sel" id="pcp" onclick="selPlan('p')">
-<div class="pc-nome" style="display:flex;justify-content:space-between">Pro <span style="background:var(--brand);color:#fff;font-size:9px;padding:2px 6px;border-radius:99px;">Popular</span></div>
-<div class="pc-preco">R$99<span>/mês</span></div>
-<ul class="pc-items"><li>Ilimitado</li><li>5 profissionais</li><li>WhatsApp</li><li>Relatórios</li></ul>
-</div>
+<div class="plano-cad" id="pcb" onclick="selPlan('b')"><div class="pc-nome">Básico</div><div class="pc-preco">R$49<span>/mês</span></div><ul class="pc-items"><li>50 agendamentos</li><li>1 profissional</li><li>Link público</li></ul></div>
+<div class="plano-cad sel" id="pcp" onclick="selPlan('p')"><div class="pc-nome" style="display:flex;justify-content:space-between">Pro <span style="background:var(--brand);color:#fff;font-size:9px;padding:2px 6px;border-radius:99px;">Popular</span></div><div class="pc-preco">R$99<span>/mês</span></div><ul class="pc-items"><li>Ilimitado</li><li>5 profissionais</li><li>WhatsApp</li><li>Relatórios</li></ul></div>
 </div>
 <button class="btn-cad" onclick="cadIr(4)">Criar conta grátis →</button>
 <button class="btn-back" onclick="cadIr(2)">← Voltar</button>
@@ -384,12 +338,12 @@ footer strong{color:var(–brand);}
 <div class="login-box">
 <h2>Entrar no painel</h2>
 <div class="sub">Acesse sua conta AgendaPro</div>
-<div class="login-err" id="lerr">Email ou senha incorretos.</div>
-<div class="field"><label>Email</label><input type="email" id="lem" placeholder="seu@email.com" value="demo@agendapro.com"/></div>
-<div class="field"><label>Senha</label><input type="password" id="lpw" placeholder="••••••••" value="123456"/></div>
-<button class="btn-cad" onclick="doLogin()">Entrar</button>
+<div id="login-err" class="msg-err"></div>
+<div id="login-ok" class="msg-ok"></div>
+<div class="field"><label>Email</label><input type="email" id="lem" placeholder="seu@email.com"/></div>
+<div class="field"><label>Senha</label><input type="password" id="lpw" placeholder="••••••••"/></div>
+<button class="btn-cad" id="btn-login" onclick="doLogin()">Entrar</button>
 <p style="text-align:center;margin-top:1rem;font-size:13px;color:var(--muted);">Não tem conta? <span style="color:var(--brand);cursor:pointer;font-weight:700;" onclick="showPage('cadastro')">Cadastre-se grátis</span></p>
-<p style="text-align:center;margin-top:.5rem;font-size:12px;color:var(--muted);">Demo: demo@agendapro.com / 123456</p>
 </div>
 </div>
 </div>
@@ -397,22 +351,17 @@ footer strong{color:var(–brand);}
 <!-- APP PAINEL -->
 
 <div id="page-app" class="page">
-<!-- Hamburger button -->
 <button class="hamburger" id="hamburger" onclick="toggleSidebar()">
-<svg viewBox="0 0 18 18" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round">
-<path d="M2 4h14M2 9h14M2 14h14"/>
-</svg>
+<svg viewBox="0 0 18 18" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><path d="M2 4h14M2 9h14M2 14h14"/></svg>
 </button>
-<!-- Overlay -->
 <div class="sb-overlay" id="sb-overlay" onclick="closeSidebar()"></div>
-
 <div class="app-wrap">
 <div class="app-sb" id="app-sb">
 <div class="app-sb-top">
 <div class="sb-mark"><svg viewBox="0 0 28 28" fill="none"><path d="M5 14 L11 20 L23 8" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="23" cy="8" r="4" fill="#c4b5fd" opacity="0.4"/></svg></div>
 <span class="sb-nm">agenda<span>pro</span></span>
 </div>
-<div class="app-biz"><div class="biz-nm" id="biz-nm">Salão da Maria</div><span class="biz-plan">Plano Pro</span></div>
+<div class="app-biz"><div class="biz-nm" id="biz-nm">Meu Negócio</div><span class="biz-plan">Plano Pro</span></div>
 <div class="app-nav">
 <div class="an active" onclick="appAba('dashboard',this)"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="1" width="6" height="6" rx="1"/><rect x="9" y="1" width="6" height="6" rx="1"/><rect x="1" y="9" width="6" height="6" rx="1"/><rect x="9" y="9" width="6" height="6" rx="1"/></svg>Dashboard</div>
 <div class="an" onclick="appAba('agenda',this)"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="3" width="14" height="12" rx="1.5"/><path d="M5 1v4M11 1v4M1 7h14"/></svg>Agenda</div>
@@ -420,7 +369,7 @@ footer strong{color:var(–brand);}
 <div class="an" onclick="appAba('link',this)"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="6"/><path d="M8 2c0 0-3 2-3 6s3 6 3 6M8 2c0 0 3 2 3 6s-3 6-3 6M2 8h12"/></svg>Link público</div>
 <div class="an" onclick="appAba('config',this)"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="2.5"/><path d="M8 1v2M8 13v2M1 8h2M13 8h2M3.05 3.05l1.42 1.42M11.53 11.53l1.42 1.42M3.05 12.95l1.42-1.42M11.53 4.47l1.42-1.42"/></svg>Configurações</div>
 </div>
-<div class="app-sb-out"><div class="out-btn" onclick="showPage('landing')"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 14H3a1 1 0 01-1-1V3a1 1 0 011-1h3M11 11l3-3-3-3M14 8H6"/></svg>Sair</div></div>
+<div class="app-sb-out"><div class="out-btn" onclick="doLogout()"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 14H3a1 1 0 01-1-1V3a1 1 0 011-1h3M11 11l3-3-3-3M14 8H6"/></svg>Sair</div></div>
 </div>
 <div class="app-main">
 <div class="app-top"><h2 id="app-title">Dashboard</h2><button class="btn-ap" id="app-btn">+ Novo agendamento</button></div>
@@ -461,14 +410,14 @@ footer strong{color:var(–brand);}
 <div class="stitle">Seu link público</div>
 <div class="link-pub">
 <div style="font-size:12px;color:var(--muted);margin-bottom:6px;">Mande este link para seus clientes agendarem:</div>
-<div class="link-url" id="app-link">agendapro.bio/salaodamaria</div>
-<div class="link-acts"><button class="btn-lo" onclick="alert('Link copiado!')">Copiar</button><button class="btn-lo" onclick="alert('Abrindo WhatsApp...')">WhatsApp</button></div>
+<div class="link-url" id="app-link">agendapro.bio/seunegocio</div>
+<div class="link-acts"><button class="btn-lo" onclick="copyLink()">Copiar</button><button class="btn-lo" onclick="shareWhatsApp()">WhatsApp</button></div>
 </div>
 </div>
 <div id="aa-config" style="display:none">
 <div class="cc"><h3>Dados do negócio</h3>
-<div class="cr"><span class="cl">Nome</span><span class="cv" id="cfg-nm">Salão da Maria</span><span class="ce">editar</span></div>
-<div class="cr"><span class="cl">Telefone</span><span class="cv">(51) 99999-9999</span><span class="ce">editar</span></div>
+<div class="cr"><span class="cl">Nome</span><span class="cv" id="cfg-nm">—</span><span class="ce">editar</span></div>
+<div class="cr"><span class="cl">Email</span><span class="cv" id="cfg-email">—</span><span class="ce">editar</span></div>
 </div>
 <div class="cc"><h3>Horários</h3>
 <div class="cr"><span class="cl">Seg–Sex</span><span class="cv">09:00–18:00</span><span class="ce">editar</span></div>
@@ -476,7 +425,6 @@ footer strong{color:var(–brand);}
 <div class="cr"><span class="cl">Domingo</span><span class="cv">Fechado</span><span class="ce">editar</span></div>
 </div>
 <div class="cc"><h3>Conta</h3>
-<div class="cr"><span class="cl">Email</span><span class="cv">demo@agendapro.com</span><span class="ce">editar</span></div>
 <div class="cr"><span class="cl">Plano</span><span class="cv">Pro — R$99/mês</span><span class="ce">ver planos</span></div>
 </div>
 </div>
@@ -486,28 +434,126 @@ footer strong{color:var(–brand);}
 </div>
 
 <script>
+// ===== SUPABASE CONFIG =====
+const SUPABASE_URL = 'https://czddjlcfbpkmxunughxm.supabase.com';
+const SUPABASE_KEY = 'sb_publishable_sq2_3JfvBr2k_jN1QNa1Yg_ucSaV-dI';
+const { createClient } = supabase;
+const sb = createClient(SUPABASE_URL, SUPABASE_KEY);
+
+// ===== NAVIGATION =====
 function showPage(p){
 document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));
 document.getElementById('page-'+p).classList.add('active');
 window.scrollTo(0,0);
 closeSidebar();
 }
+
+// ===== REGISTER =====
+async function doRegister(){
+const nome = document.getElementById('fno').value.trim();
+const email = document.getElementById('fe').value.trim();
+const senha = document.getElementById('fs').value;
+const senha2 = document.getElementById('fs2').value;
+const negocio = document.getElementById('fn').value.trim();
+const errEl = document.getElementById('cad-err');
+const btn = document.getElementById('btn-registrar');
+
+errEl.style.display='none';
+
+if(!nome||!email||!senha){errEl.textContent='Preencha todos os campos.';errEl.style.display='block';return;}
+if(senha !== senha2){errEl.textContent='As senhas não coincidem.';errEl.style.display='block';return;}
+if(senha.length < 6){errEl.textContent='A senha deve ter pelo menos 6 caracteres.';errEl.style.display='block';return;}
+
+btn.innerHTML='<span class="loading"></span>Criando conta...';
+btn.disabled=true;
+
+const {data, error} = await sb.auth.signUp({
+email: email,
+password: senha,
+options: {
+data: {
+nome: nome,
+negocio: negocio || 'Meu Negócio'
+}
+}
+});
+
+btn.innerHTML='Continuar →';
+btn.disabled=false;
+
+if(error){
+errEl.textContent = error.message === 'User already registered' ? 'Este email já está cadastrado.' : error.message;
+errEl.style.display='block';
+return;
+}
+
+// Salvo na sessão
+if(negocio) sessionStorage.setItem('negocio', negocio);
+sessionStorage.setItem('nome', nome);
+sessionStorage.setItem('email', email);
+
+cadIr(3);
+}
+
+// ===== LOGIN =====
+async function doLogin(){
+const email = document.getElementById('lem').value.trim();
+const senha = document.getElementById('lpw').value;
+const errEl = document.getElementById('login-err');
+const okEl = document.getElementById('login-ok');
+const btn = document.getElementById('btn-login');
+
+errEl.style.display='none';
+okEl.style.display='none';
+
+if(!email||!senha){errEl.textContent='Preencha email e senha.';errEl.style.display='block';return;}
+
+btn.innerHTML='<span class="loading"></span>Entrando...';
+btn.disabled=true;
+
+const {data, error} = await sb.auth.signInWithPassword({email, password: senha});
+
+btn.innerHTML='Entrar';
+btn.disabled=false;
+
+if(error){
+errEl.textContent = 'Email ou senha incorretos.';
+errEl.style.display='block';
+return;
+}
+
+// Carregar dados do usuário
+const user = data.user;
+const negocio = user.user_metadata?.negocio || 'Meu Negócio';
+const nome = user.user_metadata?.nome || email;
+
+document.getElementById('biz-nm').textContent = negocio;
+document.getElementById('cfg-nm').textContent = negocio;
+document.getElementById('cfg-email').textContent = email;
+
+const slug = negocio.toLowerCase().replace(/\s+/g,'-').replace(/[^a-z0-9-]/g,'');
+document.getElementById('app-link').textContent = 'agendapro.bio/' + slug;
+
+showPage('app');
+}
+
+// ===== LOGOUT =====
+async function doLogout(){
+await sb.auth.signOut();
+showPage('landing');
+}
+
+// ===== SIDEBAR =====
 function toggleSidebar(){
-const sb=document.getElementById('app-sb');
-const ov=document.getElementById('sb-overlay');
-sb.classList.toggle('open');
-ov.classList.toggle('show');
+document.getElementById('app-sb').classList.toggle('open');
+document.getElementById('sb-overlay').classList.toggle('show');
 }
 function closeSidebar(){
 document.getElementById('app-sb').classList.remove('open');
 document.getElementById('sb-overlay').classList.remove('show');
 }
-function doLogin(){
-const e=document.getElementById('lem').value,p=document.getElementById('lpw').value;
-if(e==='demo@agendapro.com'&&p==='123456'){showPage('app');}
-else{document.getElementById('lerr').style.display='block';}
-}
-document.getElementById('lpw').addEventListener('keydown',e=>{if(e.key==='Enter')doLogin();});
+
+// ===== CADASTRO STEPS =====
 function cadIr(n){
 [1,2,3,4].forEach(i=>document.getElementById('ce'+i).style.display=i===n?'block':'none');
 [1,2,3].forEach(i=>{
@@ -518,15 +564,19 @@ else{d.className='cad-dot pending';d.textContent=i;}
 if(i<3)document.getElementById('cl'+i).className='cad-line'+(i<n?' done':'');
 });
 if(n===4){
-const nm=document.getElementById('fn').value||'seunegocio';
-const sl=nm.toLowerCase().replace(/\s+/g,'-').replace(/[^a-z0-9-]/g,'');
-document.getElementById('suc-link').textContent='agendapro.bio/'+sl;
+const nm = sessionStorage.getItem('negocio') || document.getElementById('fn').value || 'seunegocio';
+const sl = nm.toLowerCase().replace(/\s+/g,'-').replace(/[^a-z0-9-]/g,'');
+document.getElementById('suc-link').textContent = 'agendapro.bio/'+sl;
+document.getElementById('biz-nm').textContent = nm;
 }
 }
+
 function selPlan(p){
 document.getElementById('pcb').classList.toggle('sel',p==='b');
 document.getElementById('pcp').classList.toggle('sel',p==='p');
 }
+
+// ===== APP TABS =====
 function appAba(a,el){
 ['dashboard','agenda','clientes','link','config'].forEach(x=>document.getElementById('aa-'+x).style.display=x===a?'block':'none');
 document.querySelectorAll('.an').forEach(n=>n.classList.remove('active'));
@@ -537,6 +587,23 @@ document.getElementById('app-title').textContent=t[a];
 document.getElementById('app-btn').textContent=b[a];
 closeSidebar();
 }
+
+// ===== LINK ACTIONS =====
+function copyLink(){
+const link = document.getElementById('app-link').textContent;
+navigator.clipboard.writeText('https://'+link).then(()=>alert('Link copiado!'));
+}
+function shareWhatsApp(){
+const link = document.getElementById('app-link').textContent;
+window.open('https://wa.me/?text=Agende comigo pelo AgendaPro: https://'+link);
+}
+
+// ===== CHECK SESSION =====
+sb.auth.onAuthStateChange((event, session) => {
+if(session && document.getElementById('page-app').classList.contains('active') === false){
+// Usuário já logado
+}
+});
 </script>
 
 </body>
